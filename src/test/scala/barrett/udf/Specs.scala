@@ -31,7 +31,7 @@ class Specs extends FunSuite {
     assert(expectFalse == false)
   }
 
-  test("validates almost good date") {
+  test("doesn't validate almost good date") {
     val expectFalse = ValidateGasPriceRecord.dateStringToMillis("Aug 12,2004")
     assert(expectFalse == false)
   }
