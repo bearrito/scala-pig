@@ -14,8 +14,12 @@ Building
 ========
 You should simply be able to do
   sbt reload
+  
   sbt update
+  
   sbt compile
+  
   sbt test
+  
   sbt assembly
 
