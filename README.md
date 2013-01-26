@@ -12,7 +12,8 @@ Because of the dependencies involved the project uses the sbt-assembly plugin to
 
 Building 
 ========
-You should simply be able to do
+You should simply be able to do :
+
   sbt reload
   
   sbt update
