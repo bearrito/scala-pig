@@ -22,6 +22,8 @@ libraryDependencies += "org.apache.pig" % "pig" % "0.8.0" % "provided"
 
 libraryDependencies += "org.apache.hadoop" % "hadoop-common" % "2.0.2-alpha" % "provided"
 
+libraryDependencies += "org.apache.hadoop" % "hadoop-core" % "1.1.1" % "provided"
+
 libraryDependencies += "joda-time" % "joda-time" % "2.1"
 
 libraryDependencies += "org.scalaj" % "scalaj-time_2.10.0-M7" % "0.6"
