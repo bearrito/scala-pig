@@ -1,6 +1,6 @@
 package barrett.udf
 
-import barrett.udf.DateToMillis._
+
 import org.apache.pig.EvalFunc
 import org.apache.pig.data.{DataType, Tuple}
 import org.apache.pig.impl.logicalLayer.schema.Schema

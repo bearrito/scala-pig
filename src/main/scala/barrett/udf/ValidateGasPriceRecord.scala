@@ -26,7 +26,6 @@ class ValidateGasPriceRecord extends FilterFunc {
         ValidateGasPriceRecord.dateStringToMillis(input.get(0).asInstanceOf[String])
   }
 }
-
 object ValidateGasPriceRecord
 {
 
