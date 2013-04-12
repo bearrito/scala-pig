@@ -58,9 +58,7 @@ class UdfSpecs extends JUnitSuite {
 
         test.assertOutput("data", inputA, "queries_limit", outputA)
   }
-
   @Test
-  @Ignore
   def VerifyWeatherRecordsAreParsed {
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
@@ -81,7 +79,6 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
-  @Ignore
   def VerifyWeatherRecordsAreParsedFromLocal {
 
 
@@ -104,7 +101,6 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
-  @Ignore
   def VerifySensorAverages{
 
     val args = List("n=3","reducers=1","input=/home/bearrito/Git/EMR-DEMO/code/resources/mapper_input","output=top_3_queries").toArray
@@ -121,7 +117,6 @@ class UdfSpecs extends JUnitSuite {
 
   }
   @Test
-  @Ignore
   def VerifyDateToMillisParser{
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
