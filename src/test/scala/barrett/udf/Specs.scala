@@ -10,7 +10,7 @@ package barrett.udf
 
 import org.scalatest.FunSuite
 import org.scala_tools.time.Imports._
-import org.scala_tools.time.RichDate
+import org.apache.pig.data.{DefaultTuple,TupleFactory,DefaultTupleFactory}
 
 class Specs extends FunSuite {
 
@@ -19,28 +19,22 @@ class Specs extends FunSuite {
     val expectFalse = ValidateGasPriceRecord.dateStringToMillis("sdds")
     assert(expectFalse == false)
   }
-
-
   test("doesn't validate bad date that looks right") {
     val expectFalse = ValidateGasPriceRecord.dateStringToMillis("XXX 12,2004")
     assert(expectFalse == false)
   }
-
   test("doesn't validate bad date that looks right again") {
     val expectFalse = ValidateGasPriceRecord.dateStringToMillis("XXX 12, 2004")
     assert(expectFalse == false)
   }
-
   test("doesn't validate almost good date") {
     val expectTrue = ValidateGasPriceRecord.dateStringToMillis("Aug 12,2004")
     assert(expectTrue == false)
   }
-
   test("validates good date") {
     val expectTrue = ValidateGasPriceRecord.dateStringToMillis("Aug 12, 2004")
     assert(expectTrue == true)
   }
-
   test("parses good date"){
 
     val expectSome = DateToMillis.date2Millis("20100112")
@@ -53,8 +47,6 @@ class Specs extends FunSuite {
     assert(isSome == true)
 
   }
-
-
   test("converts a good date to millis"){
 
    val goodDate = DateToMillis.date2Millis("Jan 5, 2013")
@@ -74,9 +66,27 @@ class Specs extends FunSuite {
    assert(goodDate.get <  upper)
 
   }
+  test("dateToMilli udf parses date correctly"){
+
+      val d2m = new DateToMillis()
+      val factory = new DefaultTupleFactory()
+      val tuple = factory.newTuple(1)
+      tuple.set(0,"Aug 12, 2004")
+      val result = d2m.exec(tuple)
+      assert(result == 1092283200000L)
 
 
-   //0137
+
+  }
+  test("dateToMilli udf doesn't parse a bad date"){
+    val d2m = new DateToMillis()
+    val factory = new DefaultTupleFactory()
+    val tuple = factory.newTuple(1)
+    tuple.set(0,"Aug 1,2004")
+    val result = d2m.exec(tuple)
+    assert(result == null)
+  }
+
   test("weather parser parses good record"){
     val input = "722057 12854  20100101    60.9 24    58.0 24  1017.0 15  1015.3 12    7.1 24    5.0 24   20.0  999.9    68.0    48.9   0.26G 999.9  000000"
     val expected = SimpleWeatherParser.WeatherRecord(1262322000000L,722057, 60.9)
@@ -89,7 +99,6 @@ class Specs extends FunSuite {
     val actualGot = actual.get
     assert(actualGot == expected)
   }
-
   test("weather parser does not parse bad record"){
     val input = "722057 12854  20100101      60.9 24    58.0 24  1017.0 15  1015.3 12    7.1 24    5.0 24   20.0  999.9    68.0    48.9   0.26G 999.9  000000"
     val expected = SimpleWeatherParser.WeatherRecord(20100101,722057, 60.9)
@@ -100,7 +109,5 @@ class Specs extends FunSuite {
 
     assert(isSome == false)
   }
-
-
 
 }
