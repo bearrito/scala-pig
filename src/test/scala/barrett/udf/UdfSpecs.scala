@@ -33,6 +33,7 @@ class UdfSpecs extends JUnitSuite {
 
 
   @Test
+  @Ignore
   def VerifySetupIsCorrectWithKnownScript {
         val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
         test = new PigTest(PIG_SCRIPT, args)
@@ -59,10 +60,11 @@ class UdfSpecs extends JUnitSuite {
         test.assertOutput("data", inputA, "queries_limit", outputA)
   }
   @Test
+  @Ignore
   def VerifyWeatherRecordsAreParsed {
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
-    test = new PigTest("/home/bearrito/Git/scala-pig/src/main/pig/WeatherRecordParse.pig", args)
+    test = new PigTest("/home/me/Git/scala-pig/src/main/pig/WeatherRecordParse.pig", args)
 
     val input = List(
       "722057 12854  20100101    40.9 24    58.0 24  1017.0 15  1015.3 12    7.1 24    5.0 24   20.0  999.9    68.0    48.9   0.26G 999.9  000000",
@@ -79,6 +81,7 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
+  @Ignore
   def VerifyWeatherRecordsAreParsedFromLocal {
 
 
@@ -101,6 +104,7 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
+  @Ignore
   def VerifySensorAverages{
 
     val args = List("n=3","reducers=1","input=/home/bearrito/Git/EMR-DEMO/code/resources/mapper_input","output=top_3_queries").toArray
@@ -117,6 +121,7 @@ class UdfSpecs extends JUnitSuite {
 
   }
   @Test
+  @Ignore
   def VerifyDateToMillisParser{
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
@@ -138,11 +143,32 @@ class UdfSpecs extends JUnitSuite {
 
     test = new PigTest(script,args);
     test.assertOutput("datesAsYYYYMMDD", input, "datesAsMillis", output);
+  }
+    @Test
+    def VerifyHarmonic{
+
+      val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
 
 
+      val script = List("records = LOAD '$input'  as (id : INT, d : Double , stub : CHARARRAY);",
+                        "groups = GROUP records  BY id;" ,
+                        "result = FOREACH groups GENERATE group, barrett.udf.GeometricMean(records.d);"
+      ).toArray;
+
+      val input = List(
+        "1\t8.0\ttest",
+        "1\t8.0\ttest"
+      ).toArray
+
+      val output = List(
+        "(1,7.999999999999998)"
+      ).toArray
+
+      test = new PigTest(script,args);
+      test.assertOutput("records", input, "result", output);
 
   }
 
-
-
 }
+
+

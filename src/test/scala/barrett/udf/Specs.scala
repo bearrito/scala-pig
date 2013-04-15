@@ -10,29 +10,30 @@ package barrett.udf
 
 import org.scalatest.FunSuite
 import org.scala_tools.time.Imports._
-import org.apache.pig.data.{DefaultTuple,TupleFactory,DefaultTupleFactory}
+import org.apache.pig.data.{DefaultTuple,TupleFactory,DefaultTupleFactory,DefaultDataBag}
+import scala.collection.JavaConversions._
 
 class Specs extends FunSuite {
 
 
   test("doesn't validate bad date") {
-    val expectFalse = ValidateGasPriceRecord.dateStringToMillis("sdds")
+    val expectFalse = ValidateSensorLogRecord.dateStringToMillis("sdds")
     assert(expectFalse == false)
   }
   test("doesn't validate bad date that looks right") {
-    val expectFalse = ValidateGasPriceRecord.dateStringToMillis("XXX 12,2004")
+    val expectFalse = ValidateSensorLogRecord.dateStringToMillis("XXX 12,2004")
     assert(expectFalse == false)
   }
   test("doesn't validate bad date that looks right again") {
-    val expectFalse = ValidateGasPriceRecord.dateStringToMillis("XXX 12, 2004")
+    val expectFalse = ValidateSensorLogRecord.dateStringToMillis("XXX 12, 2004")
     assert(expectFalse == false)
   }
   test("doesn't validate almost good date") {
-    val expectTrue = ValidateGasPriceRecord.dateStringToMillis("Aug 12,2004")
+    val expectTrue = ValidateSensorLogRecord.dateStringToMillis("Aug 12,2004")
     assert(expectTrue == false)
   }
   test("validates good date") {
-    val expectTrue = ValidateGasPriceRecord.dateStringToMillis("Aug 12, 2004")
+    val expectTrue = ValidateSensorLogRecord.dateStringToMillis("Aug 12, 2004")
     assert(expectTrue == true)
   }
   test("parses good date"){
@@ -108,6 +109,71 @@ class Specs extends FunSuite {
       case None =>  false }
 
     assert(isSome == false)
+  }
+
+  test("Initial executes correctly"){
+
+    import org.apache.pig.data.DataByteArray
+    import java.nio._
+    val d2m = new DateToMillis()
+    val factory = new DefaultTupleFactory()
+    val tuple = factory.newTuple(1)
+
+    tuple.set(0,new DataByteArray( scala.math.exp(4.0).toString()))
+    val tuples =    List(tuple)
+
+    val dArray = new DataByteArray()
+    val dbag = new DefaultDataBag(tuples)
+    val dtuple = factory.newTuple(1)
+    dtuple.set(0,dbag)
+    val stage = new Initial
+    val r = stage.exec(dtuple)
+    assert(r.get(0) == 4.0)
+    assert(r.get(1) == 1)
+  }
+
+  test("Intermediate executes correctly"){
+
+    import org.apache.pig.data.DataByteArray
+    import java.nio._
+    val d2m = new DateToMillis()
+    val factory = new DefaultTupleFactory()
+    val tuple = factory.newTuple(2)
+
+    tuple.set(0,new DataByteArray( 4.0.toString()))
+    tuple.set(1,1L)
+    val tuples =    List(tuple,tuple)
+
+    val dArray = new DataByteArray()
+    val dbag = new DefaultDataBag(tuples)
+    val dtuple = factory.newTuple(1)
+    dtuple.set(0,dbag)
+    val stage = new Intermediate
+    val r = stage.exec(dtuple)
+    assert(r.get(0) == 8.0)
+    assert(r.get(1) == 2)
+  }
+
+  test("Final executes correctly"){
+
+    import org.apache.pig.data.DataByteArray
+    import java.nio._
+    val d2m = new DateToMillis()
+    val factory = new DefaultTupleFactory()
+    val tuple = factory.newTuple(2)
+
+    tuple.set(0,new DataByteArray( 4.0.toString()))
+    tuple.set(1,1L)
+    val tuples =    List(tuple,tuple)
+
+    val dArray = new DataByteArray()
+    val dbag = new DefaultDataBag(tuples)
+    val dtuple = factory.newTuple(1)
+    dtuple.set(0,dbag)
+    val stage = new Final()
+    val r = stage.exec(dtuple)
+    assert(r == scala.math.exp(8.0 /2))
+
   }
 
 }
