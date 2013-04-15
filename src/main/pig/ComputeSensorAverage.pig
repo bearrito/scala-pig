@@ -5,4 +5,4 @@ grouped_channel_averages = FOREACH sensor_group GENERATE group,AVG(sensors.chann
 STORE grouped_channel_averages INTO '$output';
 
 
-
+                                                                `
