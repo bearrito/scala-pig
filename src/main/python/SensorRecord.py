@@ -18,7 +18,7 @@ class SensorRecord(object):
 
 
 records = []
-with open('/home/bearrito/Git/scala-pig/src/data/mapper_input','w+') as f:
+with open('/home/bearrito/Git/scala-pig/src/main/data/mapper_input','w+') as f:
     for i in range(10000):
         input = machine_name = "Machine-" + str((i % 3) + 1) + '\t'
         input += str(datetime.datetime.today().replace(second=0, microsecond=0)) + '\t'
