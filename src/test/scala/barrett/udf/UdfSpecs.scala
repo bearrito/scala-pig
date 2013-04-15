@@ -28,12 +28,13 @@ class UdfSpecs extends JUnitSuite {
         new Path("/home/bearrito/Git/scala-pig/src/main/pig/top_queries_input_data.txt"),
         new Path("top_queries_input_data.txt"))
 
+      cluster.update(new Path("/home/bearrito/Git/scala-pig/src/main/data/mapper_input"),new Path("mapper_input"))
+
  	  }
 
 
 
   @Test
-  @Ignore
   def VerifySetupIsCorrectWithKnownScript {
         val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
         test = new PigTest(PIG_SCRIPT, args)
@@ -60,11 +61,10 @@ class UdfSpecs extends JUnitSuite {
         test.assertOutput("data", inputA, "queries_limit", outputA)
   }
   @Test
-  @Ignore
   def VerifyWeatherRecordsAreParsed {
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
-    test = new PigTest("/home/me/Git/scala-pig/src/main/pig/WeatherRecordParse.pig", args)
+    test = new PigTest("/home/bearrito/Git/scala-pig/src/main/pig/WeatherRecordParse.pig", args)
 
     val input = List(
       "722057 12854  20100101    40.9 24    58.0 24  1017.0 15  1015.3 12    7.1 24    5.0 24   20.0  999.9    68.0    48.9   0.26G 999.9  000000",
@@ -81,7 +81,6 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
-  @Ignore
   def VerifyWeatherRecordsAreParsedFromLocal {
 
 
@@ -104,16 +103,17 @@ class UdfSpecs extends JUnitSuite {
     test.assertOutput("rawWeather", input, "cleanWeather", output);
   }
   @Test
-  @Ignore
   def VerifySensorAverages{
 
-    val args = List("n=3","reducers=1","input=/home/bearrito/Git/EMR-DEMO/code/resources/mapper_input","output=top_3_queries").toArray
+    val args = List("n=3","reducers=1","input=mapper_input","output=sensor_output").toArray
     test = new PigTest("/home/bearrito/Git/scala-pig/src/main/pig/ComputeSensorAverage.pig", args)
 
+
+
     val output = List(
-    "( Machine-1,-0.0064942719924217076,0.32952057587479033)",
-    "( Machine-2,1.0070450038667758,0.3297018000232449)" ,
-    "( Machine-3,2.0017185716988575,0.3432592560207814)"
+    "(Machine-1,0.011345351009114579,0.3370030595954243)",
+    "(Machine-2,1.0195438951198499,0.3416909992621829)",
+    "(Machine-3,1.9994550564065363,0.328697570097795)"
     ).toArray
 
     test.assertOutput("grouped_channel_averages", output);
@@ -121,7 +121,6 @@ class UdfSpecs extends JUnitSuite {
 
   }
   @Test
-  @Ignore
   def VerifyDateToMillisParser{
 
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray

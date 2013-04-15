@@ -119,10 +119,9 @@ class Specs extends FunSuite {
     val factory = new DefaultTupleFactory()
     val tuple = factory.newTuple(1)
 
-    tuple.set(0,new DataByteArray( scala.math.exp(4.0).toString()))
+    tuple.set(0, scala.math.exp(4.0))
     val tuples =    List(tuple)
 
-    val dArray = new DataByteArray()
     val dbag = new DefaultDataBag(tuples)
     val dtuple = factory.newTuple(1)
     dtuple.set(0,dbag)
@@ -140,7 +139,7 @@ class Specs extends FunSuite {
     val factory = new DefaultTupleFactory()
     val tuple = factory.newTuple(2)
 
-    tuple.set(0,new DataByteArray( 4.0.toString()))
+    tuple.set(0,4.0)
     tuple.set(1,1L)
     val tuples =    List(tuple,tuple)
 
@@ -162,7 +161,7 @@ class Specs extends FunSuite {
     val factory = new DefaultTupleFactory()
     val tuple = factory.newTuple(2)
 
-    tuple.set(0,new DataByteArray( 4.0.toString()))
+    tuple.set(0, 4.0)
     tuple.set(1,1L)
     val tuples =    List(tuple,tuple)
 
