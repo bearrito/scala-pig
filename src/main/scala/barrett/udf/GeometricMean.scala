@@ -93,10 +93,10 @@ class GeometricMean extends  EvalFunc[jDouble] with Algebraic {
     return new Initial().getClass.getCanonicalName
   }
   def getIntermed() : String = {
-    return new IntermediateA().getClass.getCanonicalName
+    return new Intermediate().getClass.getCanonicalName
   }
   def getFinal() : String = {
-    return new FinalA().getClass().getCanonicalName
+    return new Final().getClass().getCanonicalName
   }
 
 
