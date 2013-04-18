@@ -6,6 +6,8 @@ package barrett.udf
  * Date: 1/26/13
  * Time: 12:55 AM
  * To change this template use File | Settings | File Templates.
+ *
+ * http://youtrack.jetbrains.com/issue/SCL-5188
  */
 
 import org.scalatest.FunSuite

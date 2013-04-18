@@ -96,14 +96,36 @@ class GeometricMean extends  EvalFunc[jDouble] with Algebraic {
     return new IntermediateA().getClass.getCanonicalName
   }
   def getFinal() : String = {
-    return new FinalA().getClass().getCanonicalName
+    return new Final().getClass().getCanonicalName
   }
 
 
 
 }
 
+class Initial extends EvalFunc[pigTuple] {
+  override def exec(input : pigTuple) : pigTuple  = {
 
+    val t = TupleFactory.getInstance().newTuple(2);
+    val bg =  input.get(0).asInstanceOf[DataBag]
+    bg.iterator().hasNext() match
+    {
+      case true =>  {
+        val tp = bg.iterator().next()
+        t.set(0, scala.math.log( tp.get(0).asInstanceOf[Double]))
+        t.set(1, 1L)
+        t
+
+      }
+      case false => {
+        t.set(0, null)
+        t.set(1, 0L)
+        t
+      }
+    }
+
+  }
+}
 class Intermediate extends  EvalFunc[pigTuple]  {
   override def exec(input : pigTuple) : pigTuple = {
     val b = input.get(0).asInstanceOf[DataBag]
@@ -128,27 +150,4 @@ class Final extends EvalFunc[jDouble] {
 
   }
 
-}
-class Initial extends EvalFunc[pigTuple] {
-  override def exec(input : pigTuple) : pigTuple  = {
-
-    val t = TupleFactory.getInstance().newTuple(2);
-    val bg =  input.get(0).asInstanceOf[DataBag]
-    bg.iterator().hasNext() match
-    {
-      case true =>  {
-        val tp = bg.iterator().next()
-        t.set(0, scala.math.log( tp.get(0).asInstanceOf[Double]))
-        t.set(1, 1L)
-        t
-
-      }
-      case false => {
-        t.set(0, null)
-        t.set(1, 0L)
-        t
-      }
-    }
-
-  }
 }
