@@ -13,6 +13,7 @@ import org.apache.pig.pigunit.{PigTest,Cluster}
 import org.apache.pig.pigunit.pig.{PigServer,GruntParser}
 import org.junit._
 import org.scalatest.junit._
+import scala.io.Source
 import org.apache.commons.math.stat.clustering.Cluster
 
 
@@ -20,15 +21,17 @@ class UdfSpecs extends JUnitSuite {
 
     private  var  test : PigTest = _
     private  var cluster  : org.apache.pig.pigunit.Cluster = _
-    private  val PIG_SCRIPT : String = "/home/bearrito/Git/scala-pig/src/main/pig/top_queries.pig"
+    private  val PIG_SCRIPT : String = getClass().getResource("/top_queries.pig").getFile()
 
     @Before def init()  = {
     cluster = PigTest.getCluster()
       cluster.update(
-        new Path("/home/bearrito/Git/scala-pig/src/main/pig/top_queries_input_data.txt"),
+        new Path(getClass().getResource("/top_queries_input_data.txt").getFile()),
         new Path("top_queries_input_data.txt"))
 
-      cluster.update(new Path("/home/bearrito/Git/scala-pig/src/main/data/mapper_input"),new Path("mapper_input"))
+
+
+      cluster.update(new Path( getClass().getResource("/mapper_input").getFile()),new Path("mapper_input"))
 
  	  }
 
@@ -63,8 +66,10 @@ class UdfSpecs extends JUnitSuite {
   @Test
   def VerifyWeatherRecordsAreParsed {
 
+
+
     val args = List("n=3","reducers=1","input=top_queries_input_data.txt","output=top_3_queries").toArray
-    test = new PigTest("/home/bearrito/Git/scala-pig/src/main/pig/WeatherRecordParse.pig", args)
+    test = new PigTest(getClass().getResource("/WeatherRecordParse.pig").getFile(), args)
 
     val input = List(
       "722057 12854  20100101    40.9 24    58.0 24  1017.0 15  1015.3 12    7.1 24    5.0 24   20.0  999.9    68.0    48.9   0.26G 999.9  000000",
@@ -106,7 +111,7 @@ class UdfSpecs extends JUnitSuite {
   def VerifySensorAverages{
 
     val args = List("n=3","reducers=1","input=mapper_input","output=sensor_output").toArray
-    test = new PigTest("/home/bearrito/Git/scala-pig/src/main/pig/ComputeSensorAverage.pig", args)
+    test = new PigTest(getClass().getResource("/ComputeSensorAverage.pig").getFile(), args)
 
 
 
